@@ -30,6 +30,7 @@ class HomeController extends Controller
     private function _get_img_captcha()
     {
         $builder = new CaptchaBuilder;
+        $builder->setBackgroundColor('255', '255', '255');
         $builder->build(100, 40);
         Session::set('img_captcha', $builder->getPhrase());
         return $builder->inline();

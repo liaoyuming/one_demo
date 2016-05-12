@@ -116,7 +116,7 @@ $(function(){
             success : function(data){
                 console.log(data);
                 if(data.result === 0){
-                    // refresh_img_captcha();
+                    refresh_img_captcha();
                 }
                 result = data.result;
             }
