@@ -4,19 +4,34 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\SmsSendRequest;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Session;
 use Input;
 use Response;
 use App\Http\Channel\SmsAdapter;
+use Gregwar\Captcha\CaptchaBuilder;
 
 class HomeController extends Controller
 {
     public function index()
     {
+        $builder = new CaptchaBuilder;
+        $builder->build(100, 40);
+        $data['img_captcha'] = $builder->inline();
+        Session::set('img_captcha', $builder->getPhrase());
+        return view('home', $data);
+    }
 
-        return view('home');
+    public function ajax_get_img_captcha()
+    {
+
+        $builder = new CaptchaBuilder;
+        $builder->build(100, 40);
+        // Session::set('img_captcha', $builder->getPhrase());
+    //dd(Session::get('sms_captcha'));
+        return Response::json(['src' => $builder->inline()]);
     }
 
     public function register(RegisterRequest $request)
@@ -27,13 +42,26 @@ class HomeController extends Controller
         }
         dd($input);
     }
-    public function send_captcha($type = 'sms', $mobile)
+    public function send_captcha(SmsSendRequest $request)
     {
+        $type = $request->get('type') ? $request->get('type') : 'sms';
+        $mobile = $request->get('mobile');
+        if ($type == 'sms') {
+            $this->_send_sms_captcha($type, $mobile);
+        }
+    }
+
+
+    public function _send_sms_captcha($type, $mobile)
+    {
+        if (!$type || !$mobile) {
+            return false;
+        }
         $captcha = rand(100000, 999999);
-        Session::Set('sms_captcha', $captcha, 1);
-dd(Session::get('sms_captcha'));
-        $content = ' 您的验证码是' . $code . '.(请在一小时内使用。）';
-         // Session::Set('send_captcha_count', $count + 2);
+        Session::set('sms_captcha', $captcha);
+    dd(rand(100, 1100), Session::get('sms_captcha'));
+        $content = ' 您的验证码是' . $captcha . '.(请在一小时内使用。）';
+    // Session::Set('send_captcha_count', $count + 2);
         // $count   = intval(Session::Get('send_captcha_count'));
         // if ($count>3) {
         //     // todo  连续发送三次，得注意： mobile
@@ -47,6 +75,16 @@ dd(Session::get('sms_captcha'));
         if($res!==true) {
             // 报错
         }
+    }
+
+    public function ajax_check_img_captcha(Request $request)
+    {
+        $img_captcha = $request->get('img_captcha');
+        $result = (strtolower($img_captcha) == strtolower(Session::get("img_captcha")) && $img_captcha);
+        // dd(strtolower($img_captcha), strtolower(Session::get("img_captcha")), $result);
+        // $result = $result == true ? 1 : 0;
+        $result =  1;
+        return Response::json(['result' => $result]);
     }
 
 }

@@ -8,7 +8,7 @@
         "php": ">=5.5.9",
         "laravel/framework": "5.1.*",
         "latrell/alipay": "dev-master",
-        "gregwar/captcha": "1.*"
+        "gregwar/captcha": "^1.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

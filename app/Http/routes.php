@@ -15,11 +15,12 @@ Route::get('/', function () {
 
 });
 
-Route::get('home/send_captcha/{type}/{mobile}', 'HomeController@send_captcha');
-
-
+// Route::post('home/send_captcha/{type}/{mobile}', 'HomeController@send_captcha');
 Route::get('home', 'HomeController@index');
+Route::post('home/send_captcha', 'HomeController@send_captcha');
 Route::post('home/register', 'HomeController@register');
+Route::get('home/ajax_get_img_captcha', 'HomeController@ajax_get_img_captcha');
+Route::get('home/ajax_check_img_captcha', 'HomeController@ajax_check_img_captcha');
 
 // Route::controllers([
 //     'auth' => 'Auth\AuthController',

@@ -54,8 +54,8 @@ class SmsYunpianAdapter
             );
         curl_setopt ($ch, CURLOPT_URL, $sendurl);
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
-        dd($data);
         $send_res = json_decode(curl_exec($ch),true);
+        dd($send_res);
         if($send_res['code'] == 0){
             return true;
         }
