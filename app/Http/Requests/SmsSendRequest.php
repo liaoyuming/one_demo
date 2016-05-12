@@ -24,8 +24,8 @@ class SmsSendRequest extends Request
     public function rules()
     {
         return [
-            'type' => 'required',
-            'mobile'    => 'required|min:10'
+            'type'      => 'required',
+            'mobile'    => 'required|min:10'// todo
         ];
     }
 }

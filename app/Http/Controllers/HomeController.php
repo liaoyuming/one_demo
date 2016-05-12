@@ -17,21 +17,22 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $builder = new CaptchaBuilder;
-        $builder->build(100, 40);
-        $data['img_captcha'] = $builder->inline();
-        Session::set('img_captcha', $builder->getPhrase());
-        return view('home', $data);
+        $captcha_src = $this->_get_img_captcha();
+        return view('home')->with(['img_captcha' => $captcha_src]);
     }
 
     public function ajax_get_img_captcha()
     {
+        $captcha_src = $this->_get_img_captcha();
+        return Response::json(['src' => $captcha_src]);
+    }
 
+    private function _get_img_captcha()
+    {
         $builder = new CaptchaBuilder;
         $builder->build(100, 40);
-        // Session::set('img_captcha', $builder->getPhrase());
-    //dd(Session::get('sms_captcha'));
-        return Response::json(['src' => $builder->inline()]);
+        Session::set('img_captcha', $builder->getPhrase());
+        return $builder->inline();
     }
 
     public function register(RegisterRequest $request)
@@ -59,14 +60,14 @@ class HomeController extends Controller
         }
         $captcha = rand(100000, 999999);
         Session::set('sms_captcha', $captcha);
-    dd(rand(100, 1100), Session::get('sms_captcha'));
+    // dd(rand(100, 1100), Session::get('sms_captcha'));
         $content = ' 您的验证码是' . $captcha . '.(请在一小时内使用。）';
-    // Session::Set('send_captcha_count', $count + 2);
+        // Session::Set('send_captcha_count', $count + 2);
         // $count   = intval(Session::Get('send_captcha_count'));
         // if ($count>3) {
         //     // todo  连续发送三次，得注意： mobile
         // }
-// dd($content, $mobile, $code, $type);
+
         if ($type == 'sms') {
             $type = 'yunpian';
         }
@@ -81,9 +82,7 @@ class HomeController extends Controller
     {
         $img_captcha = $request->get('img_captcha');
         $result = (strtolower($img_captcha) == strtolower(Session::get("img_captcha")) && $img_captcha);
-        // dd(strtolower($img_captcha), strtolower(Session::get("img_captcha")), $result);
-        // $result = $result == true ? 1 : 0;
-        $result =  1;
+        $result = $result == true ? 1 : 0;
         return Response::json(['result' => $result]);
     }
 

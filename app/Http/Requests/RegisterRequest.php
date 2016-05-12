@@ -24,10 +24,10 @@ class RegisterRequest extends Request
     public function rules()
     {
         return [
-            'username'  => 'required',
-            'mobile'    => 'required|min:10',
-            'password'  => 'required|min:6',
-            'img_captcha' => 'required|size:6',
+            'username'      => 'required',
+            'mobile'        => 'required|min:10', //todo
+            'password'      => 'required|min:6',
+            'img_captcha'   => 'required|size:6',
             'sms_captcha'   => 'required|size:6',
         ];
     }

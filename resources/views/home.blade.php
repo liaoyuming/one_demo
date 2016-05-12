@@ -94,11 +94,10 @@ $(function(){
         } else {
             o.attr("disabled", true);
             o.html("重新发送(" + wait + ")");
-            wait--;
+            wait --;
             setTimeout(function() {
                 time_down(o)
-            },
-            1000)
+            }, 1000);
         }
     }
 
@@ -115,8 +114,9 @@ $(function(){
                 'img_captcha': img_captcha,
             },
             success : function(data){
-                if(data.result == 0){
-                    refresh_img_captcha();
+                console.log(data);
+                if(data.result === 0){
+                    // refresh_img_captcha();
                 }
                 result = data.result;
             }
