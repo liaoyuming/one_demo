@@ -39,7 +39,7 @@ class HomeController extends Controller
     {
         $input = $request->all();
         if ($input['sms_captcha'] != Session::get('sms_captcha')) {
-            dd('验证码错误');
+            dd($input, '验证码错误');
         }
         dd($input);
     }
